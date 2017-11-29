@@ -153,7 +153,146 @@ undefined
 > var acc = web3.eth.accounts[0]
 > app.totalSupply(argn, {from: acc}) << Throws an error at the moment>>
 ```
+# ----------
+# Set up contract on actual testnet. eg. ropsten
+#### Use a third party node that is already synced with the blockchain to speed up the deployment process
+1. Go to https://infura.io/register.html
+1. Sign up and obtain the access token 
+1. Use one of the below urls in the truffle.js config described further down
+Handy blog link: https://blog.infura.io/getting-started-with-infura-28e41844cc89
+```
+To get started, use the following provider URLs in your code (in place of localhost):
 
-### Set up ACTUAL testnet chain and miner on Ubuntu local machine
-TBA
+Main Ethereum Network
+https://mainnet.infura.io/ 
+
+Test Ethereum Network (Ropsten)
+https://ropsten.infura.io/ 
+
+Test Ethereum Network (Rinkeby)
+https://rinkeby.infura.io/ 
+
+Test Ethereum Network (Kovan)
+https://kovan.infura.io/ 
+
+Test Ethereum Network (INFURAnet)
+https://infuranet.infura.io/ 
+
+IPFS Gateway
+https://ipfs.infura.io 
+
+IPFS RPC
+https://ipfs.infura.io:5001 
+```
+
+# Install the needed libraries
+```
+npm install truffle-hdwallet-provider --save
+```
+# Get chrome metamask
+1. google: https://chrome.google.com/webstore/detail/metamask/
+1. add to chrome
+
+# Once installed, click the fox icon top right of chrome. 
+1. Accept conditions
+1. Create a new wallet - enter in password. Write down and remember.
+1. Save the mneomic pass phrase used to recover the wallet. Mneomic is used in cnofig below
+1. Obtain the public address of the wallet by copying clipboard.
+
+# Obtain some ether for your test wallet from a metamask Ropsten faucet
+1. Select Ropsten Network on metamask plugin on to left
+1. Click buy on metamask wallet account
+1. Click Ropsten faucet
+1. When redirected, click on "request 1 ether from faucet"
+1. Ether will be transfered from the faucet towards your (user) wallet. Check back in ~ 1 minute to see your eth received. The transaction id should be seen in the transactions box visible in the browser.
+1. Click the transaction if you wish to see the confirmations on the testnet chain.
+
+### Eth is in your testnet wallet and you are now capable of deploying the contract
+
+# Configue truffle to deploy to Ropsten
+We are configuring the infura ropsten node as entry point by providing the mnemonic phrase (Metamask / SEttings / Reveal / Seed words)
+
+```
+cat truffle.js
+```
+```
+var HDWalletProvider = require("truffle-hdwallet-provider");
+
+var infura_apikey = "XXXXXX";
+var mnemonic = "twelve words you can find in metamask/settings/reveal seed words blabla";
+
+module.exports = {
+  networks: {
+    development: {
+      host: "localhost",
+      port: 8545,
+      network_id: "*"
+    },
+    ropsten: {
+      provider: new HDWalletProvider(mnemonic, "https://ropsten.infura.io/"+infura_apikey),
+      network_id: 3,
+      gas: 4712388
+    }
+  }
+}
+```
+# Deploy to Ropsten 
+```
+rm -rf build
+truffle migrate --network ropsten
+Spanning multiple lines.
+
+Writing artifacts to ./build/contracts
+
+Using network 'ropsten'.
+
+Running migration: 1_initial_migration.js
+  Deploying Migrations...
+  ... 0x331ea345f345cd2b86e7f2f56618fb69b8ea5c8ad825702da84ea2849e5cf994
+  Migrations: 0xfa24e7f1287a220c192a3cff8f34c267314fce81
+Saving successful migration to network...
+  ... 0x256be64c311ae19a14ed2cb1b39946c09b53710ce716f115e6be2e586fbdf766
+Saving artifacts...
+Running migration: 2_deploy_contracts.2.js
+  Deploying EtherealizeToken...
+  ... 0x6bd64f056672146c0dbad149fbba49c3a8f7399ef6b996d02e7651bd1549ab2e
+  EtherealizeToken: 0x55df04e4f13a7b54aa1e5f108975395d455c088d
+Saving successful migration to network...
+  ... 0xba1fd70ffc83af4841e7f445041c9dfdbcb68e644ca548bddd5b9415dc533c01
+Saving artifacts...
+```
+
+# Search your contract address from output above eg. EtherealizeToken: <contract address>
+1. https://ropsten.etherscan.io/address/0x55df04e4f13a7b54aa1e5f108975395d455c088d#code
+
+# Verify your contract and put it up at the address by going to
+1. https://ropsten.etherscan.io/verifyContract2
+1. Verify what version of Solidity compiler you used on your machine 
+```
+truffle console
+truffle(development)> var version = soljson.cwrap('version', 'string', []);
+Truffle v4.0.1 (core: 4.0.1)
+Solidity v0.4.18 (solc-js) 
+```
+1. Prepare to flatten your source code because if you used truffle, you have import statements and need to modify them, so go to new directory and do the following OR collate all your imported .sol files into a single block of code. Ensure that all imported .sol files are defined above their first usage within the calling contracts.
+```
+sudo ap install python-pip3
+pip3 install solidity-flattener
+# code and issues at https://github.com/BlockCatIO/solidity-flattener
+```
+```
+sudo add-apt-repository ppa:ethereum/ethereum
+sudo apt-get update
+sudo apt-get install solc
+```
+cd contracts/
+solidity_flattener --output EtherealizeTokenFlattened.sol EtherealizeToken.sol
+```
+1. Copy your contract source code into the form field
+1. Verify and Submit
+1. Your contract should be submitted
+
+
+# Handy JSON RPC Link 
+https://github.com/ethereum/wiki/wiki/JSON-RPC
 
