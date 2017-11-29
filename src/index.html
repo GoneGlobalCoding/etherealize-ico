@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="http://cdn.rawgit.com/ethereum/web3.js/0.16.0/dist/web3.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="js/materialize.js"></script>
+        <link href="css/materialize.css" rel="stylesheet"/> 
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <title>Etherealize | Alpha</title>
+        <script>
+            web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io"));
+            contractAddress = "0x55df04e4f13a7b54aa1e5f108975395d455c088d";
+            contractCreator = "0xe47c4befb25055860fd026e96885b30c7a244b30";
+            abi = [{
+                    "constant": true,
+                    "inputs": [],
+                    "name": "name",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "string"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                    },
+                    {
+                    "constant": false,
+                    "inputs": [
+                        {
+                        "name": "_spender",
+                        "type": "address"
+                        },
+                        {
+                        "name": "_value",
+                        "type": "uint256"
+                        }
+                    ],
+                    "name": "approve",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                    },
+                    {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "totalSupply",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                    },
+                    {
+                    "constant": false,
+                    "inputs": [
+                        {
+                        "name": "_from",
+                        "type": "address"
+                        },
+                        {
+                        "name": "_to",
+                        "type": "address"
+                        },
+                        {
+                        "name": "_value",
+                        "type": "uint256"
+                        }
+                    ],
+                    "name": "transferFrom",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                    },
+                    {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "INITIAL_SUPPLY",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                    },
+                    {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "decimals",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                    },
+                    {
+                    "constant": false,
+                    "inputs": [
+                        {
+                        "name": "_spender",
+                        "type": "address"
+                        },
+                        {
+                        "name": "_subtractedValue",
+                        "type": "uint256"
+                        }
+                    ],
+                    "name": "decreaseApproval",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                    },
+                    {
+                    "constant": true,
+                    "inputs": [
+                        {
+                        "name": "_owner",
+                        "type": "address"
+                        }
+                    ],
+                    "name": "balanceOf",
+                    "outputs": [
+                        {
+                        "name": "balance",
+                        "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                    },
+                    {
+                    "constant": true,
+                    "inputs": [],
+                    "name": "symbol",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "string"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                    },
+                    {
+                    "constant": false,
+                    "inputs": [
+                        {
+                        "name": "_to",
+                        "type": "address"
+                        },
+                        {
+                        "name": "_value",
+                        "type": "uint256"
+                        }
+                    ],
+                    "name": "transfer",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                    },
+                    {
+                    "constant": false,
+                    "inputs": [
+                        {
+                        "name": "_spender",
+                        "type": "address"
+                        },
+                        {
+                        "name": "_addedValue",
+                        "type": "uint256"
+                        }
+                    ],
+                    "name": "increaseApproval",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "bool"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                    },
+                    {
+                    "constant": true,
+                    "inputs": [
+                        {
+                        "name": "_owner",
+                        "type": "address"
+                        },
+                        {
+                        "name": "_spender",
+                        "type": "address"
+                        }
+                    ],
+                    "name": "allowance",
+                    "outputs": [
+                        {
+                        "name": "",
+                        "type": "uint256"
+                        }
+                    ],
+                    "payable": false,
+                    "stateMutability": "view",
+                    "type": "function"
+                    },
+                    {
+                    "inputs": [],
+                    "payable": false,
+                    "stateMutability": "nonpayable",
+                    "type": "constructor"
+                    },
+                    {
+                    "anonymous": false,
+                    "inputs": [
+                        {
+                        "indexed": true,
+                        "name": "owner",
+                        "type": "address"
+                        },
+                        {
+                        "indexed": true,
+                        "name": "spender",
+                        "type": "address"
+                        },
+                        {
+                        "indexed": false,
+                        "name": "value",
+                        "type": "uint256"
+                        }
+                    ],
+                    "name": "Approval",
+                    "type": "event"
+                    },
+                    {
+                    "anonymous": false,
+                    "inputs": [
+                        {
+                        "indexed": true,
+                        "name": "from",
+                        "type": "address"
+                        },
+                        {
+                        "indexed": true,
+                        "name": "to",
+                        "type": "address"
+                        },
+                        {
+                        "indexed": false,
+                        "name": "value",
+                        "type": "uint256"
+                        }
+                    ],
+                    "name": "Transfer",
+                    "type": "event"
+                    }];
+  
+        </script>
+    </head>
+    <body>
+        <nav class="blue-grey darken-1">
+            <div class="container">
+                <div class="nav-wrapper ">
+                    <a href="#" class="brand-logo">Etherealize | Alpha</a>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li class="active"><a href="sass.html">Home</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col s12 m12">
+                    <div class="card-tabs" style="margin-top:10px;">
+                        <ul class="tabs tabs-fixed-width">
+                            <li class="tab"><a class="active" href="#tab-summary">Summary</a></li>
+                            <li class="tab"><a href="#tab-transaction">Send Tokens</a></li>
+                        </ul>
+                    </div>
+                    <div class="card horizontal blue-grey darken-1">
+                        <div class="card-image">
+                            <img style="height:300px;" src="https://res.cloudinary.com/teepublic/image/private/s--Hw--398i--/t_Preview/b_rgb:262c3a,c_limit,f_jpg,h_630,q_90,w_630/v1470823069/production/designs/625723_1.jpg">
+                        </div>
+                        <div class="card-stacked">
+                            <div id="tab-summary" class="card-content white-text">
+                                <span class="card-title">Etherealize Token Details</span>
+                                <p>Tokens currently within creators address: </p>
+                                <div class="card horizontal black-text">
+                                    <div class="card-stacked">
+                                        <div class="card-content">
+                                            <div>
+                                                <i class="material-icons" style="margin:0; padding:20px; float:left;">send</i>  
+                                                <h4 id="wallet-tokens" style="clear:none; float:left;"></h4>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-transaction" class="card-content white-text">
+                                <span class="card-title">Send Tokens</span>
+                                <form class="col s12">
+                                    <div class="row">
+                                        <div class="input-field col s12 ">
+                                        <i class="material-icons prefix">account_circle</i>
+                                        <input placeholder="100" id="num_tokens" type="text" class="validate">
+                                        <label class="white-text" for="num_tokens">Send ETR Tokens</label>
+                                        </div>
+                                        <div class="input-field col s12">
+                                        <i class="material-icons prefix">account_circle</i>
+                                        <input placeholder="0xe47c4befb25055860fd026e96885b30c7a244b30"id="target_wallet" type="text" class="validate">
+                                        <label class="white-text" for="target_wallet">Target Address</label>
+                                        </div>
+                                    </div>
+                                    <button id="send-transaction" class="btn waves-effect waves-light" type="submit" name="action">Transfer Tokens
+                                        <i class="material-icons right">send</i>
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="card-action">
+                                <a class="waves-effect waves-light btn" target="_blank" id="contract-link" href="#"><i class="material-icons left"> </i> Contract Address</a>
+                                <a class="waves-effect waves-light btn" target="_blank" id="creator-wallet-link" href="#"><i class="material-icons left"> </i> Creator Wallet Address</a>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+            
+        <script>
+            ETRContract = web3.eth.contract(abi);
+            contractInstance = ETRContract.at(contractAddress);
+            balance = contractInstance.balanceOf(contractCreator);
+
+            $(document).ready(function(){
+                $('#contract-link').attr('href',"https://ropsten.etherscan.io/address/" + contractAddress + "/#code");
+                $('#creator-wallet-link').attr('href',"https://ropsten.etherscan.io/address/" + contractCreator);
+                $('#wallet-tokens').append(balance + ` ETR`);
+                
+                $('#send-transaction').click(function(){
+                    event.preventDefault();
+                    var amount = $('#num_tokens').val();
+                    var toAddress = $('#target_wallet').val();
+                    alert(amount);
+                    alert(toAddress);
+                    console.log('Transfer ' + amount + ' ETR to ' + toAddress);
+                    
+                    return contractInstance.transfer(toAddress, amount, {from: contractCreator}).send()
+                    .then(function(result) {
+                        alert('Transfer Successful!');
+                        console.log(result);
+                    }).catch(function(err) {
+                        alert('Err');
+                        console.log(err.message);
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
