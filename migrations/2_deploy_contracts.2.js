@@ -1,5 +1,5 @@
-var EtherealizeToken = artifacts.require("./EtherealizeToken.sol");
+var Etherealize = artifacts.require("./Etherealize.sol");
 
 module.exports = function(deployer) {
-    deployer.deploy(EtherealizeToken);
+    deployer.deploy(Etherealize);
 };

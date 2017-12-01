@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!-- This script is needed to expose ethereum RPC commands. Enables connection to ethereum -->
         <script src="http://cdn.rawgit.com/ethereum/web3.js/0.16.0/dist/web3.min.js"></script>
+        <!-- This script is needed so that we can sign our Ethereum transactions locally. Needed the Tx and Buffer objects -->
+        <script src="https://cdn.rawgit.com/ethereumjs/browser-builds/2fb69a714afe092b06645286f14b94f41e5c062c/dist/ethereumjs-tx.js"></script>         
+        <!-- Dynamic web effects -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="js/materialize.js"></script>
-        <link href="css/materialize.css" rel="stylesheet"/> 
+        <!-- Styling -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="css/materialize.css" rel="stylesheet"/> 
         <title>Etherealize | Alpha</title>
         <script>
+            /** Immediately define the ethereum web3 provider / node you can connect to **/
             web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io"));
-            contractAddress = "0x55df04e4f13a7b54aa1e5f108975395d455c088d";
+            /** Check if you are able to connect to this provider **/
+            if(!web3.isConnected())
+                console.log("not connected");
+            else
+                console.log("connected")
+            /** Define variables that will be used for this example file in scripts below **/
+            /** First deployed address that had 10 decimal values **/
+            /** -- contractAddress = "0x55df04e4f13a7b54aa1e5f108975395d455c088d"; -- **/
+            contractAddress = "0xdef8c6be0f1c4e5e8adeed234723a4e9f81fca93";
             contractCreator = "0xe47c4befb25055860fd026e96885b30c7a244b30";
-            abi = [{
+            /** Definition of the target contract in ABI (application binary interface) format **/
+            /** --abi = [{                    "constant": true,                    "inputs": [],                    "name": "name",                    "outputs": [                        {                        "name": "",                        "type": "string"                        }                    ],                    "payable": false,                    "stateMutability": "view",                    "type": "function"                    },                    {                    "constant": false,                    "inputs": [                        {                        "name": "_spender",                        "type": "address"                        },                        {                        "name": "_value",                        "type": "uint256"                        }                    ],                    "name": "approve",                    "outputs": [                        {                        "name": "",                        "type": "bool"                        }                    ],                    "payable": false,                    "stateMutability": "nonpayable",                    "type": "function"                    },                    {                    "constant": true,                    "inputs": [],                    "name": "totalSupply",                    "outputs": [                        {                        "name": "",                        "type": "uint256"                        }                    ],                    "payable": false,                    "stateMutability": "view",                    "type": "function"                    },                    {                    "constant": false,                    "inputs": [                        {                        "name": "_from",                        "type": "address"                        },                        {                        "name": "_to",                        "type": "address"                        },                        {                        "name": "_value",                        "type": "uint256"                        }                    ],                    "name": "transferFrom",                    "outputs": [                        {                        "name": "",                        "type": "bool"                        }                    ],                    "payable": false,                    "stateMutability": "nonpayable",                    "type": "function"                    },                    {                    "constant": true,                    "inputs": [],                    "name": "INITIAL_SUPPLY",                    "outputs": [                        {                        "name": "",                        "type": "uint256"                        }                    ],                    "payable": false,                    "stateMutability": "view",                    "type": "function"                    },                    {                    "constant": true,                    "inputs": [],                    "name": "decimals",                    "outputs": [                        {                        "name": "",                        "type": "uint256"                        }                    ],                    "payable": false,                    "stateMutability": "view",                    "type": "function"                    },                    {                    "constant": false,                    "inputs": [                        {                        "name": "_spender",                        "type": "address"                        },                        {                        "name": "_subtractedValue",                        "type": "uint256"                        }                    ],                    "name": "decreaseApproval",                    "outputs": [                        {                        "name": "",                        "type": "bool"                        }                    ],                    "payable": false,                    "stateMutability": "nonpayable",                    "type": "function"                    },                    {                    "constant": true,                    "inputs": [                        {                        "name": "_owner",                        "type": "address"                        }                    ],                    "name": "balanceOf",                    "outputs": [                        {                        "name": "balance",                        "type": "uint256"                        }                    ],                    "payable": false,                    "stateMutability": "view",                    "type": "function"                    },                    {                    "constant": true,                    "inputs": [],                    "name": "symbol",                    "outputs": [                        {                        "name": "",                        "type": "string"                        }                    ],                    "payable": false,                    "stateMutability": "view",                    "type": "function"                    },                    {                    "constant": false,                    "inputs": [                        {                        "name": "_to",                        "type": "address"                        },                        {                        "name": "_value",                        "type": "uint256"                        }                    ],                    "name": "transfer",                    "outputs": [                        {                        "name": "",                        "type": "bool"                        }                    ],                    "payable": false,                    "stateMutability": "nonpayable",                    "type": "function"                    },                    {                    "constant": false,                    "inputs": [                        {                        "name": "_spender",                        "type": "address"                        },                        {                        "name": "_addedValue",                        "type": "uint256"                        }                    ],                    "name": "increaseApproval",                    "outputs": [                        {                        "name": "",                        "type": "bool"                        }                    ],                    "payable": false,                    "stateMutability": "nonpayable",                    "type": "function"                    },                    {                    "constant": true,                    "inputs": [                        {                        "name": "_owner",                        "type": "address"                        },                        {                        "name": "_spender",                        "type": "address"                        }                    ],                    "name": "allowance",                    "outputs": [                        {                        "name": "",                        "type": "uint256"                        }                    ],                    "payable": false,                    "stateMutability": "view",                    "type": "function"                    },                    {                    "inputs": [],                    "payable": false,                    "stateMutability": "nonpayable",                    "type": "constructor"                    },                    {                    "anonymous": false,                    "inputs": [                        {                        "indexed": true,                        "name": "owner",                        "type": "address"                        },                        {                        "indexed": true,                        "name": "spender",                        "type": "address"                        },                        {                        "indexed": false,                        "name": "value",                        "type": "uint256"                        }                    ],                    "name": "Approval",                    "type": "event"                    },                    {                    "anonymous": false,                    "inputs": [                        {                        "indexed": true,                        "name": "from",                        "type": "address"                        },                        {                        "indexed": true,                        "name": "to",                        "type": "address"                        },                        {                        "indexed": false,                        "name": "value",                        "type": "uint256"                        }                    ],                    "name": "Transfer",                    "type": "event"                    }];
+            **/
+            abi = [
+                    {
                     "constant": true,
                     "inputs": [],
                     "name": "name",
@@ -291,8 +309,10 @@
                     ],
                     "name": "Transfer",
                     "type": "event"
-                    }];
-  
+                    }
+                ];
+            /** Example of how to parse abi from json file if this javascript was on a node backend **/
+            // var abiArray = JSON.parse(fs.readFileSync('mycoin.json', 'utf-8'));
         </script>
     </head>
     <body>
@@ -363,32 +383,68 @@
                 </div>
             </div>
         </div>
-            
         <script>
-            ETRContract = web3.eth.contract(abi);
-            contractInstance = ETRContract.at(contractAddress);
-            balance = contractInstance.balanceOf(contractCreator);
-
             $(document).ready(function(){
+                /** Using the known abi of our contract, inject it into the contract object **/
+                ETRContract = web3.eth.contract(abi);
+                /** Specify the exact address that this contract is located and for you to interact with **/
+                contractInstance = ETRContract.at(contractAddress);
+                /** Execute a command on this contract - get the balance of contractCreator **/
+                balance = contractInstance.balanceOf(contractCreator);
+                console.log(balance);
+                /** 
+                 * On document ready
+                 * dynamically fill the contents of the html dom with below values
+                 **/
                 $('#contract-link').attr('href',"https://ropsten.etherscan.io/address/" + contractAddress + "/#code");
                 $('#creator-wallet-link').attr('href',"https://ropsten.etherscan.io/address/" + contractCreator);
                 $('#wallet-tokens').append(balance + ` ETR`);
-                
+                /** On click event when sending a transaction **/
                 $('#send-transaction').click(function(){
                     event.preventDefault();
+                    /** Obtain values from form **/
                     var amount = $('#num_tokens').val();
                     var toAddress = $('#target_wallet').val();
-                    alert(amount);
-                    alert(toAddress);
-                    console.log('Transfer ' + amount + ' ETR to ' + toAddress);
-                    
-                    return contractInstance.transfer(toAddress, amount, {from: contractCreator}).send()
-                    .then(function(result) {
-                        alert('Transfer Successful!');
-                        console.log(result);
-                    }).catch(function(err) {
-                        alert('Err');
-                        console.log(err.message);
+                    var privateKey = $('#private_key').val();
+                    /** Obtain the current gasPrice of the network **/
+                    const gasPrice = web3.eth.gasPrice;
+                    console.log(gasPrice);
+                    /** Convert gas price to Hex **/
+                    const gasPriceHex = web3.toHex(gasPrice);
+                    /** Based of the latest block, understand the gasLimit **/
+                    var glimit = web3.eth.getBlock("latest").gasLimit;
+                    console.log(glimit);
+                    /** Convert gasLimit to Hex **/
+                    gasLimitHex = web3.toHex(glimit);
+                    /** Obtain the transaction count for sender **/
+                    var count = web3.eth.getTransactionCount(contractCreator);
+                    var rawTransaction = {
+                        "from" : contractCreator,
+                        "nonce" : count,
+                        "gasLimit": gasLimitHex,
+                        "gasPrice" : gasPriceHex,
+                        "to": contractAddress,
+                        "value": "0x0",
+                        "data": contractInstance.transfer.getData(toAddress, parseInt(amount), {from: contractCreator}),
+                        "chainId": 0x03
+                    }
+                    /** Prepare the transaction object with above rawTransaction fields **/
+                    var tx = new EthJS.Tx(rawTransaction);
+                    /** Private key of the address signing and approving a transaction **/
+                    var contractPrivateKey = "156058826c4d33c5be1ec27a39c226b7b9a14bb37ab61feee6d04876f7374651";
+                    /** Private key must be in hex format. Pass it through the below function to get hex **/
+                    var privKey = new EthJS.Buffer.Buffer(contractPrivateKey, 'hex');
+                    console.log(privKey);
+                    /** Sign the transaction as valid using your private key **/
+                    tx.sign(privKey);
+                    /** The signed transaction must be searlized before posting **/
+                    var serializedTx = tx.serialize();
+                    /** Use the web3.eth library to send the raw signed transaction **/
+                    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
+                        if (!err)
+                            console.log(hash);
+                        else
+                            console.log(err);
                     });
                 });
             });
